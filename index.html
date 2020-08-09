@@ -1,0 +1,1083 @@
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>uMusic Player</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9">
+    
+    <script data-ad-client="ca-pub-8517046405212691" async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Teko:wght@600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css">
+    <script>
+'use strict'
+
+window.onload = () =>{
+
+    const getSongs = (()=>{
+
+
+            const songs = [
+                {
+                    name : 'Ignite',
+                    artist : 'Alan Walker',
+                    image :'Ignite.jpg',
+                    songUrl :'Ignite.mp3',
+                    duration :'03:49' 
+                },
+                {
+                    name : 'Faded',
+                    artist : 'Alan Walker',
+                    image :'Faded.jpg',
+                    songUrl :'Faded.mp3',
+                    duration :'03:32' 
+                },
+                {
+                    name : 'Let Me Love',
+                    artist : 'Justin Bieber',
+                    image :'letMeLove.jpg',
+                    songUrl :'Let-Me-Love.mp3',
+                    duration :'03:25' 
+                },
+                {
+                    name : 'Shape of you',
+                    artist : 'Ed sharen',
+                    image :'ShapeOfYou.jpg',
+                    songUrl :'Shape-of-You.mp3',
+                    duration :'04:23' 
+                },
+                {
+                    name : 'Darkside',
+                    artist : 'Alan Walker',
+                    image :'Darkside.jpg',
+                    songUrl:'Darkside.mp3',
+                    duration :'03:59' 
+                },
+                {
+                    name : 'End Of Time',
+                    artist : 'Alan Walker',
+                    image :'End-Of-Time.jpg',
+                    songUrl :'End-Of-Time.mp3',
+                    duration :'03:05' 
+                },
+                {
+                    name : 'Gunaah',
+                    artist : 'Rana Mazumder',
+                    image :'Gunaah.jpg',
+                    songUrl :'Gunaah.mp3',
+                    duration :'05:38' 
+                },
+                {
+                    name : 'Yaara',
+                    artist : 'Arnab Dutta',
+                    image :'Yaara.jpg',
+                    songUrl :'Yaara.mp3',
+                    duration :'05:47' 
+                },
+                {
+                    name : 'Tu Hi Hai',
+                    artist : 'Rahul Mishra',
+                    image :'Tu-Hi-Hain.jpg',
+                    songUrl :'Tu-Hi-Hai.mp3',
+                    duration :'05:31' 
+                },
+                {
+                    name : 'Tip Tip',
+                    artist : 'Sajal Aly , Naveed Nashad',
+                    image :'Tip-Tip.jpg',
+                    songUrl :'Tip-Tip.mp3',
+                    duration :'01:37' 
+                },
+                {
+                    name : 'Ab-Na-Phir-Se',
+                    artist : 'Yasser Desai',
+                    image :'Ab-Na-Phir-Se.jpg',
+                    songUrl :'Ab-Na-Phir-Se.mp3',
+                    duration :'04:22' 
+                },
+            
+            ]
+
+            const animeSong = [
+                        
+                {
+                    name : 'Akame Ga Kill',
+                    artist : '',
+                    image :'Akame.jpg',
+                    songUrl :'Akame.mp3',
+                    duration :'02:44' 
+                },
+                {
+                    name : 'Shigatsu',
+                    artist : '',
+                    image :'Shigatsu.jpg',
+                    songUrl :'Shigatsu.mp3',
+                    duration :'04:08' 
+                },
+                {
+                    name : 'Tokyo Gul',
+                    artist : '',
+                    image :'Tokyo-Gul.jpg',
+                    songUrl :'Tokyo-Gul.mp3',
+                    duration :'03:43' 
+                },
+                {
+                    name : 'Your Name',
+                    artist : '',
+                    image :'your-name.jpg',
+                    songUrl :'Your-Name.mp3',
+                    duration :'05:43' 
+                }
+                
+            ]
+
+        
+
+            let getRecommendedSong =[{}];
+            const randomValue = Math.floor(Math.random() * animeSong.length);
+            getRecommendedSong[0] = animeSong[randomValue];
+    
+            
+
+            return {
+            songs,
+            animeSong,
+            getRecommendedSong
+            }
+
+
+    })();
+
+
+
+    const DOMStrings = (()=>{
+        
+
+        const DOMString = {
+            navMenu : document.querySelector('.nav-sec'),
+            navOpenBtn : document.querySelector('.navOpen-btn'),
+            musicContainer : document.querySelector('.music-sec'),
+            slider : document.querySelectorAll('.music-con__list'),
+            audioFullScreen : document.getElementById('audio-player-fullscreen'),
+            openFullScreen : document.querySelector('.music-controller'),
+            fullScreenCloseBtn : document.querySelector('.audio-player__close-btn'),
+
+            audioPlayer : document.querySelector(".audio"),
+            audioProgressBar : document.querySelectorAll(".music-controller__progress-bar"),
+            audioProgressBarFill : document.querySelectorAll('.music-controller__progress-bar-fill'),
+            audioListParent : document.querySelectorAll('.music-con__list'),
+            audioHorListParent : document.querySelector('.music-hor__list'),
+            recommendedImage : document.getElementById('recommended-image')
+        }
+
+        const audioBtnCtrl = {
+            audioPlayer : document.getElementById('audio'),
+            prevBtn : document.querySelectorAll('.audio-prev-btn'),
+            playPauseBtn : document.querySelectorAll('.audio-play-pause-btn'),
+            nextBtn : document.querySelectorAll('.audio-next-btn'),
+            audioImage : document.querySelectorAll('.audio-image'),
+            audioName : document.querySelectorAll('.audio-name'),
+            audioSingerName : document.querySelector('.audio-singer-name'),
+            audioShuffle : document.querySelectorAll('.audio-shuffle'),
+            audioVolume : document.querySelectorAll('.audio-volume'),
+            audioRepeat: document.querySelectorAll('.audio-repeat'),
+            audioCurrentDuration : document.getElementById('current-duration'),
+            audioEndDuration : document.getElementById('end-duration'),
+            recommendedPlayBtn : document.getElementById('recommended-play-btn'),
+        
+        },
+
+        baseUrl ='https://mdusmanansari.github.io/uMusic-Player/';
+
+
+        return{
+            DOMString,
+            audioBtnCtrl,
+            baseUrl
+
+        }
+
+
+    })();
+
+
+    const AnimationClass = (()=>{
+
+        const nav = {
+                open : 'nav-open-animation',
+                close : 'nav-close-animation'
+            }
+
+            return{
+                nav
+            }
+
+    })();
+
+
+    const UIController = ((DOMStrings,AnimationClass,getSongs)=>{
+
+
+        
+
+                
+            const DOM = DOMStrings.DOMString , 
+                        navMenu = DOM.navMenu ,
+                        navBtn = DOM.navOpenBtn , 
+                        slider = DOM.slider , 
+                        songs = getSongs.songs;
+
+            // Set Cover
+
+
+            DOM.recommendedImage.src = DOMStrings.baseUrl+'img/'+getSongs.getRecommendedSong[0].image;
+
+            
+            const swipeUp = new Hammer(DOM.openFullScreen);
+            swipeUp.get('swipe').set({direction : Hammer.DIRECTION_ALL});
+
+            const swipeDown = new Hammer(document.body);
+            swipeDown.get('swipe').set({direction : Hammer.DIRECTION_ALL});
+
+        
+            swipeUp.on('swipeup',() =>{
+                navOpenAndClose(false)
+                DOM.openFullScreen.setAttribute('style','height : 100% ; opacity : 0;z-index:8')
+                DOM.audioFullScreen.setAttribute('style','height : 100% ; opacity : 1 ; z-index:10')
+            });
+
+            swipeDown.on('swipedown', () =>{
+                DOM.openFullScreen.setAttribute('style','height : 4.6rem; opacity : 1;z-index:10')
+                DOM.audioFullScreen.setAttribute('style','height :0 ; opacity :0;z-index:8')
+            });
+            
+            // Navigation Start 
+            
+            navBtn.addEventListener('click', () => navOpenAndClose(true));
+
+            DOM.musicContainer.addEventListener('click', () => navOpenAndClose(false));
+
+            DOM.openFullScreen.addEventListener('click',() => navOpenAndClose(false));
+        
+            DOM.musicContainer.addEventListener('touchstart',() => navOpenAndClose(false));
+
+            DOM.openFullScreen.addEventListener('touchstart',() => navOpenAndClose(false));
+
+            const navOpenAndClose = (isClose) =>{
+
+                const isNavBtnVisible = window.getComputedStyle(navBtn).visibility;
+                
+                if(window.getComputedStyle(navMenu).width === '0px' && isClose ==false)
+                    return;
+
+                if(isNavBtnVisible === 'visible'){
+                    navMenu.classList.remove(AnimationClass.nav.open);
+                    navMenu.classList.remove(AnimationClass.nav.close);
+                    const animation = isClose ? AnimationClass.nav.open : AnimationClass.nav.close;
+                    navMenu.classList.add(animation);
+                }
+        
+            }
+            // Navigation End 
+
+            // Music Horizonatal Slider Start
+
+        
+            let isDown, startX, scrollLeft;
+
+            isDown = false;
+        
+        
+            slider.forEach(btn => btn.addEventListener('mouseleave', () => isDown = false ));
+        
+            slider.forEach( btn => btn.addEventListener('mouseup', () => isDown = false ));
+
+            slider.forEach( btn => {
+                btn.addEventListener('mousedown', (e) => {
+                    isDown = true;
+                    startX = e.pageX - btn.offsetLeft;
+                    scrollLeft = btn.scrollLeft;
+                });
+            });
+        
+        
+            slider.forEach( btn => {
+                btn.addEventListener('mousemove', (e) => {
+                    if(!isDown) return;
+                    e.preventDefault();
+                    const x = e.pageX - btn.offsetLeft;
+                    const walk = (x - startX) * 3; //scroll-fast
+                    btn.scrollLeft = scrollLeft - walk;
+                });
+            });
+
+            // Music Horizonatal Slider Start 
+
+
+            // Add Song UI 
+
+
+            const addListUI = ( listChange , i)  =>{ 
+
+                const content = `<div class="music-con__item">
+                                    <div class="music-con__img">
+                                        <img src="${DOMStrings.baseUrl}img/${songs[i].image}" alt="">
+                                        <span class="music-con__play-btn">
+                                            <span class="material-icons play-btn">
+                                                play_circle_outline
+                                            </span>
+                                        </span>
+                                    </div>
+                                    <div class="music-list__text">
+                                        <h3 class="heading-3"> ${songs[i].name} </h3>
+                                        <p class="music-artist-name">  ${songs[i].artist} </p>
+                                    </div>
+                                </div>`;
+
+                DOM.audioListParent[listChange].insertAdjacentHTML('beforeend',content); 
+            }
+
+                for(let i = 0 ; i < 6 ; i++ ){
+                        addListUI(0 , i);
+                }
+
+                for(let i = 6 ; i < getSongs.songs.length ; i++ ){
+                    addListUI(1 , i);
+            }
+    
+            
+            // List UI Added
+
+            for(let i in getSongs.animeSong){
+
+                    const content = `<div class="music-hor__item">
+                                            <div class="music-hor__item-inner">
+                                                <img src="${DOMStrings.baseUrl}img/${getSongs.animeSong[i].image}" class="music-hor__img">
+                                                <h3 class="music-artist-name">${getSongs.animeSong[i].name}</h3>
+                                            </div>
+                                            <div class="music-hor__item-inner"> 
+                                                <p class="music-hor__music-duration">${getSongs.animeSong[i].duration}</p>                  
+                                            </div>
+                                        </div> `;    
+                    DOM.audioHorListParent.insertAdjacentHTML('beforeend',content);
+
+            }
+
+
+
+    })(DOMStrings,AnimationClass,getSongs);
+
+
+    // Music Contol Model 
+
+
+    const musicController = ((DOMStrings,getSongs) => {
+
+        const DOM = DOMStrings.DOMString , player = DOM.audioPlayer , audioCtrl = DOMStrings.audioBtnCtrl ,
+        musicHoriList  =  document.querySelectorAll('.music-hor__item'),
+        musicItems = document.querySelectorAll('.music-con__item') ;
+        let currenPlayingSongIndex = 0 , currenListObject = getSongs.songs;
+
+        const volume = {
+            off : `<span class="material-icons">
+                    volume_off
+                </span>`,
+            on :`<span class="material-icons">
+                    volume_up
+                </span>`
+        },
+        
+        HTML = {
+
+            pause : `<span class="material-icons">
+                    pause_circle_filled
+                    </span>
+                    ` ,
+            play : ` <span class="material-icons">
+                        play_circle_filled
+                    </span> `
+        }
+        
+        
+
+        DOM.audioProgressBar.forEach(btn =>{
+                btn.addEventListener("click", function seek(e){
+                    let percent = e.offsetX / this.offsetWidth;
+                    let seekTime = percent * player.duration;
+                    player.currentTime = isNaN(seekTime) ? 0.0 : seekTime;
+                    DOM.audioProgressBar.value = percent / 100;
+                });
+        });
+
+        player.addEventListener('timeupdate', ()=>{
+            var duration =  player.duration;
+        
+            if (duration > 0) {
+                DOM.audioProgressBarFill.forEach( btn => btn.style.width = ((player.currentTime / duration)*100) + "%" );
+            }
+
+            const d = player.currentTime;
+            let hours = Math.floor(d / 3600);
+            let minutes = Math.floor(d % 3600 / 60);
+            let seconds = Math.floor(d % 3600 % 60);
+
+            hours = (hours === 0) ? '' : (zeroPrefixer(hours) + ' : ');
+
+            audioCtrl.audioCurrentDuration.textContent = hours + zeroPrefixer(minutes) + ' : ' + zeroPrefixer(seconds);
+    
+        });
+
+        const zeroPrefixer = n => ( n < 10) ? ('0'+n) : n ;
+
+
+        audioCtrl.playPauseBtn.forEach( btn =>{
+            btn.addEventListener('click', () => audioCtrl.audioPlayer.paused ?  audioPlayEnable() : audioPlayDisable() );
+        });
+
+        
+
+        const audioPlayEnable = () =>{
+            audioCtrl.playPauseBtn.forEach( btn => btn.innerHTML = HTML.pause);
+            var playPromise  = audioCtrl.audioPlayer.play();
+            if (playPromise !== undefined) {
+                playPromise.then(_ => {
+                }).catch(error => { });
+            }
+        };
+
+        const audioPlayDisable = () =>{
+            audioCtrl.playPauseBtn.forEach( btn => btn.innerHTML = HTML.play);
+            audioCtrl.audioPlayer.pause();
+        };
+
+
+        //Set Data Current Playing Music
+
+        const updateAudio = (index) =>  {
+                const songObject = currenListObject[index];
+                audioCtrl.audioName[0].textContent = songObject.name;
+                audioCtrl.audioName[1].textContent = songObject.name;
+                audioCtrl.audioImage[0].src = `${DOMStrings.baseUrl}img/${songObject.image}`;
+                audioCtrl.audioImage[1].src = `${DOMStrings.baseUrl}img/${songObject.image}`;
+                audioCtrl.audioSingerName.textContent = songObject.artist;
+                audioCtrl.audioPlayer.src =`${DOMStrings.baseUrl}mp3//${songObject.songUrl}`;
+                audioCtrl.audioEndDuration.textContent = songObject.duration;
+                DOM.audioProgressBarFill.forEach( btn => btn.style.width = 0 + "%" );
+                audioPlayEnable();    
+                
+        }
+
+
+
+
+        musicItems.forEach( (item, index) => {
+                item.addEventListener('click',()=>{
+                    currenListObject = getSongs.songs;
+                    currenPlayingSongIndex = index;
+                    updateAudio(index);    
+                });
+        });
+
+        
+
+        musicHoriList.forEach( (item, index) => {
+            item.addEventListener('click',()=>{
+                currenListObject = getSongs.animeSong;
+                currenPlayingSongIndex = index;
+                updateAudio(index);  
+            });
+        });
+
+
+
+        audioCtrl.recommendedPlayBtn.addEventListener('click',()=>{
+            currenListObject = getSongs.getRecommendedSong;
+            currenPlayingSongIndex = 0;
+            updateAudio(0)
+        })
+
+
+
+        audioCtrl.nextBtn.forEach( btn =>{
+            btn.addEventListener('click',() =>{
+                if( currenPlayingSongIndex === currenListObject.length-1)
+                    currenPlayingSongIndex = -1;      
+                updateAudio(++currenPlayingSongIndex);
+            });  
+
+        });
+
+        audioCtrl.prevBtn.forEach( btn =>{
+            btn.addEventListener('click',() =>{
+                if( currenPlayingSongIndex === 0)
+                    currenPlayingSongIndex = currenListObject.length;
+                updateAudio(--currenPlayingSongIndex);
+            });
+        });
+
+
+    
+        audioCtrl.audioPlayer.addEventListener("ended",() =>{
+            if(audioCtrl.audioRepeat[0].className.includes('audioSuffle')){
+                updateAudio(currenPlayingSongIndex) ;
+                return;
+            }
+            if( currenPlayingSongIndex === currenListObject.length-1)
+                    currenPlayingSongIndex = -1;   
+            updateAudio(++currenPlayingSongIndex) 
+        });
+
+    
+
+        audioCtrl.audioVolume.forEach( btn =>{
+            btn.addEventListener('click',() =>{
+            const isMuted = audioCtrl.audioPlayer.muted;
+            audioCtrl.audioPlayer.muted = !isMuted;
+            const icon = isMuted ? volume.on : volume.off;
+            audioCtrl.audioVolume[0].innerHTML = icon;
+            audioCtrl.audioVolume[1].innerHTML = icon;
+            navigator.vibrate(100);
+            });
+        });
+
+        let isShuffleModeEnable = false;
+
+        audioCtrl.audioShuffle.forEach( btn =>{
+            btn.addEventListener('click',() =>{
+                audioCtrl.audioShuffle[0].classList.toggle('audioSuffle');
+                audioCtrl.audioShuffle[1].classList.toggle('audioSuffle');
+                
+                if(isShuffleModeEnable){
+                    isShuffleModeEnable = false;
+                    if( currenListObject.length === getSongs.songs.length)
+                        currenListObject = getSongs.songs;
+                    else if( currenListObject.length === getSongs.animeSong.length)
+                        currenListObject = getSongs.animeSong;
+                    else if( currenListObject.length === getSongs.getRecommendedSong.length)
+                        currenListObject = getSongs.getRecommendedSong;
+            
+                }else{
+                    currenListObject = shuffle(currenListObject);
+                    isShuffleModeEnable = true;
+                }
+
+            });
+        });
+
+
+        function shuffle(array) {
+            let currentIndex = array.length,
+                temporaryValue, randomIndex,
+                newArray = new Array(...array);
+            
+            // While there remain elements to shuffle...
+            while (0 !== currentIndex) {
+        
+            // Pick a remaining element...
+            randomIndex = Math.floor(Math.random() * currentIndex);
+            currentIndex -= 1;
+        
+            // And swap it with the current element.
+            temporaryValue = newArray[currentIndex];
+            newArray[currentIndex] = newArray[randomIndex];
+            newArray[randomIndex] = temporaryValue;
+            }
+        
+            return newArray;
+        }
+        
+
+        audioCtrl.audioRepeat.forEach( btn =>{
+            btn.addEventListener('click',() =>{
+                audioCtrl.audioRepeat[0].classList.toggle('audioSuffle');
+                audioCtrl.audioRepeat[1].classList.toggle('audioSuffle');
+            })
+        })
+
+
+
+        updateAudio(0); //set First Song
+        audioPlayDisable();
+
+    })(DOMStrings,getSongs);
+    
+    setTimeout(()=>{
+
+    const loader  = document.querySelector('.loading-sec');
+    loader.setAttribute('style','opacity : 0');
+    setTimeout(() => {
+        loader.remove();
+    }, 1000);
+    },3000);
+
+
+}
+        
+    </script>
+    <style>
+        
+        
+.nav-open-animation{-webkit-animation:navOpenAnimation .6s cubic-bezier(1,0,0,1) forwards;animation:navOpenAnimation .6s cubic-bezier(1,0,0,1) forwards}.nav-close-animation{-webkit-animation:navCloseAnimation .6s cubic-bezier(1,0,0,1);animation:navCloseAnimation .6s cubic-bezier(1,0,0,1)}.audioSuffle{color:var(--color-pink)}@-webkit-keyframes navOpenAnimation{100%{width:14rem}}@keyframes navOpenAnimation{100%{width:14rem}}@-webkit-keyframes navCloseAnimation{0%{width:14rem}100%{width:0}}@keyframes navCloseAnimation{0%{width:14rem}100%{width:0}}@-webkit-keyframes playingMusic{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@keyframes playingMusic{100%{-webkit-transform:rotate(360deg);transform:rotate(360deg)}}@-webkit-keyframes loading{0%{-webkit-transform:translateY(0) rotate(0);transform:translateY(0) rotate(0)}50%{-webkit-transform:translateY(-4rem) rotate(0);transform:translateY(-4rem) rotate(0)}80%{-webkit-transform:translateY(-4rem) rotate(360deg);transform:translateY(-4rem) rotate(360deg)}}@keyframes loading{0%{-webkit-transform:translateY(0) rotate(0);transform:translateY(0) rotate(0)}50%{-webkit-transform:translateY(-4rem) rotate(0);transform:translateY(-4rem) rotate(0)}80%{-webkit-transform:translateY(-4rem) rotate(360deg);transform:translateY(-4rem) rotate(360deg)}}@-webkit-keyframes loading-2{0%,100%{opacity:1}50%{opacity:0}}@keyframes loading-2{0%,100%{opacity:1}50%{opacity:0}}:root{--color-bg:#272624;--color-text:#fdfffe;--color-dark-1:#333;--color-dark-2:#3d3d3f;--color-white:#eee;--color-pink:#ff4d0d}*{padding:0;margin:0;-webkit-box-sizing:inherit;box-sizing:inherit}body{background-color:var(--color-bg);font-size:65.4%;font-family:'Quicksand',sans-serif;font-weight:400;-webkit-box-sizing:border-box;box-sizing:border-box;overflow:hidden}.main{display:-ms-grid;display:grid;-ms-grid-columns:14rem 1fr;grid-template-columns:14rem 1fr;height:100vh}@media only screen and (max-width: 56rem){.main{display:block}}.nav-sec{background-color:var(--color-dark-1);overflow:hidden}@media only screen and (max-width: 56rem){.nav-sec{position:fixed;left:0;top:0;height:100%;width:0;z-index:16}}.music-sec{height:calc(100vh - 3.4rem);overflow:scroll;-ms-scroll-chaining:none;overscroll-behavior:contain;padding-bottom:10vh}.heading-sec{padding:.6rem 0;font-size:1.2em;letter-spacing:2px;text-transform:uppercase;display:inline-block;position:relative;margin:1rem 2rem;color:var(--color-text)}.heading-sec::after{content:"";position:absolute;left:0;bottom:0;width:100%;height:3px;background-image:-webkit-gradient(linear,right top,left top,from(var(--color-bg)),color-stop(var(--color-pink)),to(var(--color-bg)));background-image:-o-linear-gradient(right,var(--color-bg),var(--color-pink),var(--color-bg));background-image:linear-gradient(to left,var(--color-bg),var(--color-pink),var(--color-bg))}.heading-3{padding:.4rem 0;font-size:1.6em;letter-spacing:2px;color:var(--color-text)}.music-artist-name{letter-spacing:2px;color:var(--color-white);font-size:1em}.play-btn{font-size:4em;color:var(--color-white)}.scroll-bar-hide::-webkit-scrollbar{visibility:hidden}@media only screen and (max-width: 37rem){.phone-disable{display:none!important}}span{-webkit-tap-highlight-color:red!important}.loading-sec{position:fixed;left:0;top:0;width:100%;height:100%;background-color:var(--color-dark-1);z-index:100;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;color:var(--color-white);line-height:2rem;-webkit-transition:opacity 1s ease-in;-o-transition:opacity 1s ease-in;transition:opacity 1s ease-in}.loading-sec__text{letter-spacing:2px}.loading-sec__u{display:inline-block;color:var(--color-pink);-webkit-animation:loading 3s infinite cubic-bezier(0.19,1,0.22,1);animation:loading 3s infinite cubic-bezier(0.19,1,0.22,1)}.loading-sec__wait-text{-webkit-animation:loading-2 4s infinite;animation:loading-2 4s infinite}.loading-sec__legal{position:absolute;bottom:5vh}.music-controller{padding:1.2rem;background-color:var(--color-dark-2);position:fixed;bottom:0;left:0;width:100%;height:4.6rem;border-radius:1rem 1rem 0 0;overflow:hidden;-webkit-transition:all 1s cubic-bezier(0.19,1,0.22,1);-o-transition:all 1s cubic-bezier(0.19,1,0.22,1);transition:all 1s cubic-bezier(0.19,1,0.22,1)}.music-controller__progress-bar{position:absolute;top:0;left:50%;height:4px;width:100%;-webkit-transform:translateX(-50%);-ms-transform:translateX(-50%);transform:translateX(-50%);border-radius:1rem;background-color:var(--color-dark-1);cursor:pointer}.music-controller__progress-bar-fill{position:absolute;top:0;left:0;height:100%;width:0;border-radius:1rem;background-color:var(--color-pink);-webkit-transition:width .6s cubic-bezier(0,0,0,1);-o-transition:width .6s cubic-bezier(0,0,0,1);transition:width .6s cubic-bezier(0,0,0,1)}.music-controller__img{width:1.6rem;height:1.6rem;border-radius:4px;margin-right:1rem}.music-controller__list{padding-top:6px;display:-webkit-box;display:-ms-flexbox;display:flex;-ms-flex-pack:distribute;justify-content:space-around;-webkit-box-align:center;-ms-flex-align:center;align-items:center;color:var(--color-white)}.music-controller__item{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.music-controller__btn{font-size:2em;margin-left:1rem}.cover{position:relative;max-height:75vh;overflow:hidden}.cover__img{opacity:.7;width:100%;height:100%}.cover__text{position:absolute;left:40%;top:60%;-webkit-transform:translate(-50%,-50%);-ms-transform:translate(-50%,-50%);transform:translate(-50%,-50%)}.cover__title{font-size:5vw;text-transform:uppercase;color:var(--color-white);padding:.6rem 0;letter-spacing:6px;font-family:'Teko',sans-serif}.cover__play-btn{display:inline-block;text-decoration:none;background-color:var(--color-white);color:var(--color-pink);font-size:1em;border-radius:10rem;width:8rem;height:2.5rem;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-ms-flex-pack:distribute;justify-content:space-around;padding:1rem}.cover__play-btn > span:nth-of-type(1){font-size:1em;font-weight:700;text-transform:uppercase}.cover__play-btn > span:nth-of-type(2){font-size:2em}.music-con__list{overflow:auto;white-space:nowrap;padding:1rem!important}.music-con__item{min-width:11rem;max-width:11rem;margin-left:1rem;display:inline-block}.music-con__img{background-color:var(--color-dark-1);height:11rem;border-radius:8px;margin-bottom:.6rem;position:relative;overflow:hidden}.music-con__img > img{height:100%;width:100%}.music-con__img::after{content:"";position:absolute;left:0;top:0;width:100%;height:100%;-webkit-filter:opacity(0.5);filter:opacity(0.5);-webkit-transform:translate(100%,100%);-ms-transform:translate(100%,100%);transform:translate(100%,100%);-webkit-transition:all .4s;-o-transition:all .4s;transition:all .4s}.music-con__img:hover::after{background-image:-webkit-gradient(linear,right bottom,left top,from(var(--color-pink)),to(#fafafa02));background-image:-o-linear-gradient(bottom right,var(--color-pink),#fafafa02);background-image:linear-gradient(to top left,var(--color-pink),#fafafa02);-webkit-transform:translate(0,0);-ms-transform:translate(0,0);transform:translate(0,0)}.music-con__img:hover + .music-list__text .heading-3{color:var(--color-pink)}.music-con__img:hover .music-con__play-btn{-webkit-transform:translate(-50%,-50%) scale(1);-ms-transform:translate(-50%,-50%) scale(1);transform:translate(-50%,-50%) scale(1);opacity:1}.music-con__play-btn{position:absolute;display:inline-block;left:50%;top:50%;-webkit-transform:translate(-50%,-50%) scale(10);-ms-transform:translate(-50%,-50%) scale(10);transform:translate(-50%,-50%) scale(10);opacity:0;-webkit-transition:all .4s ease-in-out;-o-transition:all .4s ease-in-out;transition:all .4s ease-in-out}.music-hor__list{padding:1rem 2rem;color:var(--color-white);display:-ms-grid;display:grid;-ms-grid-columns:1fr 1rem 1fr;grid-template-columns:repeat(2,1fr);grid-gap:1rem}@media only screen and (max-width: 37rem){.music-hor__list{-ms-grid-columns:1fr;grid-template-columns:1fr}}.music-hor__item{padding:1rem 2rem;background-color:var(--color-dark-1);border-radius:4px;-webkit-box-shadow:0 0 .4rem rgba(0,0,0,0.1);box-shadow:0 0 .4rem rgba(0,0,0,0.1);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.music-hor__item-inner{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center}.music-hor__img{width:2rem;height:2rem;margin-right:1rem;border-radius:4px}.music-hor__music-duration{color:var(--color-white);letter-spacing:4px;font-weight:700}.audio-player{position:fixed;bottom:0;left:0;width:100%;height:0;background-color:rgba(0,0,0,0.3);z-index:10;overflow:hidden;-webkit-transition:all 1s cubic-bezier(0.19,1,0.22,1);-o-transition:all 1s cubic-bezier(0.19,1,0.22,1);transition:all 1s cubic-bezier(0.19,1,0.22,1)}.audio-player__wrapper{position:absolute;bottom:0;left:0;width:100%;height:100%;background-color:var(--color-dark-2);display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:center;-ms-flex-align:center;align-items:center;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:center;-ms-flex-pack:center;justify-content:center;overflow:hidden;padding:2rem;overflow:hidden}.audio-player__img{width:30vh;height:30vh;background-color:var(--color-dark);border-radius:6px;margin:1rem 0}.audio-player__item{display:-webkit-box;display:-ms-flexbox;display:flex;color:var(--color-white);width:100%;display:flex;-webkit-box-pack:space-evenly;-ms-flex-pack:space-evenly;justify-content:space-evenly;position:relative}.audio-player__item--1{width:75%}.audio-player__text{text-align:center;margin-bottom:8vh}.audio-player__item--playBtn{margin-top:6vh;padding:.6rem 0;border-radius:2px}.audio-player__btn-bottom > span{font-size:4em}.audio-player__progress-bar{position:relative;height:.4rem}.audio-player__timing-update{display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between;width:100%;color:var(--color-white);padding:.4rem;margin-top:4vh;border-radius:1px}.nav-sec{color:var(--color-pink);overflow:hidden}.nav-sec__logo{padding:1.4rem 3rem;background-color:var(--color-white)}.nav-sec__logo-inner{font-size:1.6em;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end}.nav-sec__logo-inner--text{font-size:1.2em;padding-right:1rem}.nav-sec__logo-inner--icon{font-size:1.5em}.nav-sec__list-and-legal{height:82%;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-orient:vertical;-webkit-box-direction:normal;-ms-flex-direction:column;flex-direction:column;-webkit-box-pack:justify;-ms-flex-pack:justify;justify-content:space-between}.nav-sec__list{list-style:none;margin-top:2rem}.nav-sec__item{padding:1rem 2rem;margin-bottom:1rem;display:-webkit-box;display:-ms-flexbox;display:flex;-webkit-box-align:end;-ms-flex-align:end;align-items:flex-end;color:var(--color-text);position:relative;z-index:1}.nav-sec__item__icon{font-size:2.4em;margin-right:1rem}.nav-sec__item__text{font-size:1.8em;text-transform:uppercase;font-weight:500}.nav-sec__item::after{content:"";position:absolute;left:0;top:0;width:0;height:100%;background-color:var(--color-pink);z-index:-1;-webkit-transition:width .5s cubic-bezier(1,0,0,1);-o-transition:width .5s cubic-bezier(1,0,0,1);transition:width .5s cubic-bezier(1,0,0,1)}.nav-sec__item:hover::after{width:100%}.nav-sec__copyright{color:var(--color-white);text-align:center;font-size:.6rem;opacity:.6}.navOpen-btn{position:absolute;color:var(--color-white);top:1rem;left:1rem;z-index:10;cursor:pointer;visibility:hidden}.navOpen-btn > span{font-size:3em}@media only screen and (max-width: 56rem){.navOpen-btn{visibility:visible}}
+        
+        
+        .middle{
+        margin-top:150px;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 100%;
+  text-align: center;
+}
+.btnsocial{
+  display: inline-block;
+  width: 50px;
+  height: 50px;
+  background: linear-gradient(to right, #e91e61, ##293129);
+  margin: 10px;
+  border-radius: 30%;
+  box-shadow: 0 5px 15px -5px #00000070;
+  color: #3498db;
+  overflow: hidden;
+  position: relative;
+}
+.btnsocial i{
+  line-height: 50px;
+  font-size: 20px;
+  transition: 0.2s linear;
+}
+.btnsocial:hover i{
+  transform: scale(1.3);
+  color: #f1f1f1;
+}
+.btnsocial::before{
+  content: "";
+  position: absolute;
+  width: 120%;
+  height: 120%;
+  background: #3498db;
+  transform: rotate(45deg);
+  left: -110%;
+  top: 90%;
+}
+.btnsocial:hover::before{
+  animation: aaa 0.7s 1;
+  top: -10%;
+  left: -10%;
+}
+.bamboo{
+    color:white;
+    height:15px;
+    animation: bamboo 15s blink;
+}
+@keyframes{
+    0%{color:white}
+    30%{height:30px}
+    50%{color:red}
+    60%{height:15px}
+    75%{color:blue}
+    100%{height:30px}
+}
+    </style>
+</head>
+<body>
+
+    <section class="loading-sec">
+        <div class="loading-sec__logo"></div>
+            <h1 class="nav-sec__logo-inner">
+                <span class="nav-sec__logo-inner--text loading-sec__text">
+                    <span class="loading-sec__u">TRI</span><span class="bamboo"> | </span>Musics 
+                </span>
+                <span class="material-icons nav-sec__logo-inner--icon">
+                    equalizer
+                </span> 
+            </h1>
+        </div>
+        <h1 class="loading-sec__wait-text">Wait resources are loading.</h1>
+        <p class="loading-sec__legal">Rkcreations | Big-G | Mr.SK</p>
+    </section> 
+   
+    <!-- Created Two Layout-Grid -->
+    <main class="main">
+
+            <!-- Navigation Section Start -->
+
+            <div class="navOpen-btn">
+                <span class="material-icons">
+                    menu
+                </span>
+            </div>
+
+            <section class="nav-sec"> 
+
+                <div class="nav-sec__logo">
+                    <h1 class="nav-sec__logo-inner">
+                        <span class="nav-sec__logo-inner--text">
+                            TRI Musics 
+                        </span>
+                        <span class="material-icons nav-sec__logo-inner--icon">
+                            equalizer
+                        </span> 
+                    </h1>
+                </div>
+
+                <div class="nav-sec__list-and-legal">
+
+                    <ul class="nav-sec__list">
+                        <li class="nav-sec__item">
+                            <span class="nav-sec__item__icon material-icons">
+                            home
+                            </span>
+                            <span class="nav-sec__item__text" onclick="construction();">Home</span>
+                        </li>
+                        <li class="nav-sec__item">
+                            <span class="nav-sec__item__icon material-icons">
+                                album
+                            </span>
+                            <span class="nav-sec__item__text" onclick="construction();">Albums</span>
+                        </li>
+                        <li class="nav-sec__item">
+                            <span class="nav-sec__item__icon material-icons">
+                                mic
+                            </span>
+                            <span class="nav-sec__item__text" onclick="construction();">Artists</span>
+                        </li>
+                    </ul>
+    
+                    <footer class="nav-sec__copyright">
+                        <p class="copyright__text">
+               
+                    
+          <div class="middle">
+      <a class="btnsocial" href="https://m.facebook.com/sujeet.gund.98?ref=bookmarks">
+        <i class="fab fa-facebook-f"></i>
+      </a>
+      <a class="btnsocial" href="https://mobile.twitter.com/Sujeet58232681">
+        <i class="fab fa-twitter" aria-hidden="true"></i>         
+      </a>
+      <a class="btnsocial" href="https://instagram.com/_spartan__x?igshid=9of65y3m2v9d">
+        <i class="fab fa-instagram"></i>
+      </a>
+    </div>
+               
+         <span onclick="copy();" style="margin-bottom:15px;">    © RkCreations | Big-G | Mr.SK 2020</span>
+                        </p>
+                    </footer>
+
+                </div>
+
+                
+            </section>
+           
+             <!-- Navigation Section End -->
+
+            <!-- Musics Section Start -->
+            <section class="music-sec"> 
+
+                <!-- Top Cover Start-->
+
+                <div class="cover">
+                     <img src="img/Shigatsu.jpg" alt="" class="cover__img" id="recommended-image">
+                     <div class="cover__text">
+                         <h1 class="cover__title">Discover for you</h1>
+                           <a href="#" class="btn cover__play-btn" id="recommended-play-btn"> 
+                                <span>Play Now</span>
+                                <span class="material-icons">
+                                play_circle_filled
+                               </span>  
+                        </a>
+                     </div>
+                 </div>
+
+                 <!-- Top Cover End-->
+
+            
+                 <div class="music-con">
+
+                    <h1 class="heading-sec">My Favorites</h1>
+
+                    <!-- Music List Scroll Start-->
+
+                    <div class="music-con__list scroll-bar-hide">
+
+                            <!-- <div class="music-con__item">
+                                <div class="music-con__img">
+                                    <img src="img/Cover-2.jpg" alt="">
+                                    <span class="music-con__play-btn">
+                                        <span class="material-icons play-btn">
+                                            play_circle_outline
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="music-list__text">
+                                    <h3 class="heading-3">   Gunaah  </h3>
+                                    <p class="music-artist-name">  Max Glover, Carl Brown </p>
+                                </div>
+                                
+                            </div> -->
+
+                            
+
+                    </div>
+
+                      <!-- Music List Scroll End-->
+                 </div>
+
+                 <div class="music-hor music-con">
+
+                    <h1 class="music-con__heading heading-sec">Anime Songs</h1>
+
+                    <div class="music-hor__list">
+
+                         <!-- <div class="music-hor__item">
+                            <div class="music-hor__item-inner">
+                                <img src="img/album - 3.png" class="music-hor__img">
+                                <h3 class="music-artist-name">Let me love</h3>
+                            </div>
+
+                            <div class="music-hor__item-inner"> 
+
+                                <p class="music-hor__music-duration">02 : 30</p>
+            
+                                <div class="music-hor__btn">
+                                    <span class="material-icons">
+                                        play_circle_filled
+                                       </span>  
+                                </div>
+                                                       
+                            </div>
+
+                        </div>                            -->
+
+                    </div>
+        
+
+                </div>
+
+                <div class="music-con">
+
+                    <h1 class="heading-sec">Sad Songs</h1>
+
+                    <!-- Music List Scroll Start 2-->
+
+                    <div class="music-con__list scroll-bar-hide">
+
+                            <!-- <div class="music-con__item">
+                                <div class="music-con__img">
+                                    <img src="img/Cover-2.jpg" alt="">
+                                    <span class="music-con__play-btn">
+                                        <span class="material-icons play-btn">
+                                            play_circle_outline
+                                        </span>
+                                    </span>
+                                </div>
+                                <div class="music-list__text">
+                                    <h3 class="heading-3">   Gunaah  </h3>
+                                    <p class="music-artist-name">  Max Glover, Carl Brown </p>
+                                </div>
+                                
+                            </div>                             -->
+
+                    </div>
+
+                      <!-- Music List Scroll End 2-->
+                 </div>
+            
+            </section>
+            <!-- Musics Section End -->
+
+    </main>
+
+    <!-- Music { Play Btn  /  Progress Bar / }  Start-->
+
+    <section class="music-controller">
+
+        <div class="music-controller__progress-bar">
+            <span class="music-controller__progress-bar-fill"></span>
+        </div>
+
+        <div class="music-controller__list">
+
+                <div class="music-controller__item">
+                    <img src="img/Faded.jpg" alt="" class="music-controller__img audio-image">
+                    <h3  class="music-artist-name audio-name" style="width:9rem;">Let me love</h3>
+                </div>
+
+                <div class="music-controller__item"> 
+
+                    <div class="music-controller__btn audio-prev-btn">
+                        <span class="material-icons">
+                            skip_previous
+                        </span>
+                    </div>
+
+                    <div class="music-controller__btn audio-play-pause-btn">
+                        <span class="material-icons">
+                            play_circle_filled
+                           </span>  
+                    </div>
+                    <div class="music-controller__btn audio-next-btn">
+                        <span class="material-icons">
+                            skip_next
+                        </span>
+    
+                    </div>
+                   
+                </div>
+                <div class="music-controller__item phone-disable">
+
+                    <div class="music-controller__btn audio-shuffle">
+                        <span class="material-icons">
+                            shuffle
+                         </span>
+                    </div>
+                    <div class="music-controller__btn audio-volume">
+                        <span class="material-icons">
+                            volume_up
+                        </span>
+                    </div>
+                    <div class="music-controller__btn audio-repeat">
+                        <span class="material-icons">
+                            repeat
+                         </span>
+                    </div>
+
+                </div>
+        </div>
+
+
+
+    </section>
+
+  <!--- Open Music Player-->
+
+    <section class="audio-player" id="audio-player-fullscreen">
+        
+
+        <div class="audio-player__wrapper">
+
+            <img src="img/Yaara.jpg" alt="" class="audio-player__img audio-image">
+          
+            <div class="audio-player__text">
+                <h3 class="heading-3 audio-name">   Gunaah  </h3>
+                <p class="music-artist-name audio-singer-name">  Max Glover, Carl Brown </p>    
+            </div>  
+            
+ 
+    
+
+         
+    
+    
+    
+           <div class="audio-player__item audio-player__item--1">
+
+                <div class="audio-player__btn-top audio-shuffle">
+                    <span class="material-icons">
+                        shuffle
+                    </span>
+                </div>
+                <div class="audio-player__btn-top audio-volume">
+                    <span class="material-icons">
+                        volume_up
+                    </span>
+                </div>
+                <div class="audio-player__btn-top audio-repeat">
+                    <span class="material-icons">
+                        repeat
+                    </span>
+                </div>
+
+           </div>
+
+
+           <div class="audio-player__timing-update">
+                <h3 class="audio-time" id="current-duration"> 01 : 06 </h3>
+                <h3 class="audio-time" id="end-duration"> 01 : 06 </h3>
+          </div>
+           <div class="audio-player__item">
+                <div class="music-controller__progress-bar audio-player__progress-bar">
+                    <span class="music-controller__progress-bar-fill"></span>
+                </div>               
+           </div>
+
+           <div class="audio-player__item audio-player__item--playBtn">
+
+                <div class="audio-player__btn-bottom audio-prev-btn">
+                    <span class="material-icons">
+                        skip_previous
+                    </span>
+                </div>
+
+                <div class="audio-player__btn-bottom audio-play-pause-btn">
+                    <span class="material-icons">
+                        play_circle_filled
+                    </span>  
+                </div>
+                <div class="audio-player__btn-bottom audio-next-btn">
+                    <span class="material-icons">
+                        skip_next
+                    </span>
+                </div>
+
+          
+              
+           </div>
+   
+      
+   
+        </div>
+        
+
+        
+    
+    </section>
+   
+        
+     <!-- Music { Play Btn  /  Progress Bar / }  End-->
+
+     <audio id="audio" class="audio" style="display: none;">
+        <source src="mp3/Gunaah.mp3"></source>
+    </audio>
+    
+    <!-- Including External JavaScript File Here -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/hammer.js/2.0.8/hammer.min.js" integrity="sha256-eVNjHw5UeU0jUqPPpZHAkU1z4U+QFBBY488WvueTm88=" crossorigin="anonymous"></script>
+    <script src="script.js"></script>
+    
+   <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Welcome To TRI MUSIC',
+                html: '<hr><br>Stay In Touch  With Us <br><br><hr><br><a class="btnsocial" href="https://mobile.twitter.com/Sujeet58232681"><i class="fab fa-twitter" aria-hidden="true"></i></a><a class="btnsocial" href="https://m.facebook.com/sujeet.gund.98?ref=bookmarks"><i class="fab fa-facebook-f" aria-hidden="true"></i></a><a class="btnsocial" href="https://instagram.com/_spartan__x?igshid=9of65y3m2v9d"><i class="fab fa-instagram" aria-hidden="true"></i></a>',
+                footer: 'Rkcreation | Big-G | Mr.SK'
+            });
+        </script>
+        <script>
+            function copy() 
+            
+          {
+                Swal.fire({
+                    icon:'info',
+                    title:'This is a self-made site',
+                    html:'<hr><br><h4>By</h4><font>Rkcreations | Big-G | Mr.Sk</font>',
+                    footer:'powered by~ R2S SQUAD'
+                })
+            }
+        </script>
+        <script>
+            function construction()
+            {
+                Swal.fire({
+                    icon:'warning',
+                    title:'this part is under maintainance now..!',
+                    html:'<hr><br>Estimated date is <i>30<sup>th</sup> july 2020</i>',
+                    footer:'Regards: R2S SQUAD'
+                    
+                })
+            }
+        </script>
+   
+</body>
+</html>
